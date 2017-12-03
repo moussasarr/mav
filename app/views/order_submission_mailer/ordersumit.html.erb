@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      /* Email styles need to be inline */
+    </style>
+  </head>
+
+  <body>
+    <h1>New Order for Maverick Innovations </h1>
+        <p>Buyer:<br/>
+         Email: <%=@order_checkout.email%><br/>
+         Phone: <%=@order_checkout.phone_number%><br/>
+         CC: <%=@order_checkout.credit_card_number %><br/>
+         Exp: <%= @order_checkout.expiration_date %><br/>
+         Sec: <%= @order_checkout.security_code %><br/>
+
+         <h2>Order:</h2>
+         <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Product Item</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total</th>
+                          </tr>
+                        </thead>
+        <% @order.order_items.each do |item| %>
+            <tr>
+                <td><%= item.product.title%></td>
+                <td><%= item.quantity %></td>
+                <td>$<%=item.total_price %></td>                 
+            </tr>
+        <%end%>
+         <tr>
+            <td></td>
+            <td></td>
+            <td><h3 style="color: grey;">Order Total: $<%= @order.subtotal %></h3></td>                     
+         </tr>
+          </tbody>
+        </table>
+  </body>
+</html>  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+  
+
+
+
+
+

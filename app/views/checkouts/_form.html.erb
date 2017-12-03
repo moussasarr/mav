@@ -1,0 +1,73 @@
+
+      <%= form_for(checkout) do |f| %>
+        <% if checkout.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(checkout.errors.count, "error") %> prohibited this checkout from being saved:</h2>
+
+            <ul>
+            <% checkout.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+           <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Product Item</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+
+            <% current_order.order_items.each do |item| %>
+              <tr>
+                <td><%= item.product.title%></td>
+                <td><%= item.quantity %></td>
+                <td>$<%=item.total_price %></td>                 
+              </tr>
+             <%end%>
+             <tr>
+                <td></td>
+                <td></td>
+                <td><h3 style="color: grey;">Order Total: $<%= current_order.subtotal %></h3></td>                     
+              </tr>
+              </tbody>
+            </table>
+
+
+            <h2> Complete Information </h2><hr>
+
+
+        <div class="field">
+          <%= f.label :email, "Enter your email" %>
+          <%= f.text_field :email %>
+        </div><br/>
+
+        <div class="field">
+          <%= f.label :phone_number, "Enter your phone number" %>
+          <%= f.text_field :phone_number %>
+        </div><br/>
+
+        <h2>Payment</h2><hr>
+        <div class="field">
+          <%= f.label :credit_card_number, "Enter your Credit Card number" %>
+          <%= f.number_field :credit_card_number %>
+        </div><br/>
+
+        <div class="field">
+          <%= f.label :expiration_date, "Enter the Expiration Date" %>
+          <%= f.text_field :expiration_date %>
+        </div><br/>
+         <div class="field">
+          <%= f.label :security_code, "Enter the Securit Code" %>
+          <%= f.number_field :security_code %>
+        </div><br/>
+        <p style="color:grey;"> We will get back to you within the hour after submission </p>
+        <%= f.hidden_field :order_id, value: current_order.id %>
+        <div class="actions">
+          <%= f.submit "Submit Order", class: 'btn btn-primary' %>
+        </div><br/>
+
+      <% end %>

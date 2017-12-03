@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :admin_only, :except => :show
+  before_filter :verify_is_admin, only: [:show, :edit, :update, :destroy, :index]
 
   def index
     @users = User.all
@@ -36,6 +37,10 @@ class UsersController < ApplicationController
     unless current_user.admin?
       redirect_to root_path, :alert => "Access denied."
     end
+  end
+
+  def verify_is_admin
+    (current_user.nil?) ? redirect_to(root_path) : (redirect_to(root_path) unless current_user.admin?)
   end
 
   def secure_params

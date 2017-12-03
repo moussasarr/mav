@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+<a href=<%='slides/new' %>  class="btn btn-primary pull-right">New Slide</a>
+
+<h1 style="margin-top:70px;margin-left: 30px; color: #2CA4B0">Slides</h1>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Slide Title</th>
+      <th scope="col">Product Type</th>
+      <th scope="col">Slide Image</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @slides.each do |s| %>
+    <tr>
+      <th scope="row"><%= s.id %></th>
+      <td><%= s.title %></td>
+      <td><%= s.product_type %></td>
+      <td><%= image_tag s.image.url(:thumb) %></td>
+      <td><%= link_to 'Show', s %>
+        
+         <%= link_to 'Edit', edit_slide_path(s) %>
+        <%= link_to 'Destroy', s, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+    <%end%>
+  </tbody>
+</table>
+
+<br>
+
+

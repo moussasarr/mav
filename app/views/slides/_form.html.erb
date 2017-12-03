@@ -1,0 +1,32 @@
+<%= form_for @slide, url: slides_path, html: { multipart: true } do |f| %>
+  <% if slide.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(slide.errors.count, "error") %> prohibited this slide from being saved:</h2>
+
+      <ul>
+      <% slide.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div><br/>
+
+  <div class="field">
+    <%= f.label :product_type %>
+    <%= f.text_field :product_type %>
+  </div><br/>
+
+  <div class="field">
+    <%= f.label :image %>
+    <%= f.file_field :image %>
+  </div><br/>
+
+  <div class="actions">
+    <%= f.submit  %>
+  </div>
+<% end %>

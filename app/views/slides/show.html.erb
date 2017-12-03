@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+    <div class="col-lg-4 col-md-offset-4" >
+	    <p>
+		  <strong>Slide Title:</strong>
+		  <%= @slide.title %>
+		</p>
+
+		<p>
+		  <strong>Product type:</strong>
+		  <%= @slide.product_type %>
+		</p>
+
+		<p>
+		  <strong>Image:</strong>
+		  <%= @slide.image %><br/>
+		  <%= image_tag @slide.image.url(:thumb) %>
+		</p>
+
+	<%= link_to 'Edit', edit_slide_path(@slide) %> |
+	<%= link_to 'Back', slides_path %>
+    </div>
+</div>

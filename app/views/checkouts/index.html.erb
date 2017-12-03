@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Checkouts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>String</th>
+      <th>Phone number</th>
+      <th>String</th>
+      <th>Order</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @checkouts.each do |checkout| %>
+      <tr>
+        <td><%= checkout.email %></td>
+        <td><%= checkout.string %></td>
+        <td><%= checkout.phone_number %></td>
+        <td><%= checkout.string %></td>
+        <td><%= checkout.order_id %></td>
+        <td><%= link_to 'Show', checkout %></td>
+        <td><%= link_to 'Edit', edit_checkout_path(checkout) %></td>
+        <td><%= link_to 'Destroy', checkout, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Checkout', new_checkout_path %>

@@ -1,0 +1,49 @@
+<% if !@order_item.nil? && @order_item.errors.any? %>
+	<ul>
+		<% @order_item.errors.full_messages.each do |msg| %>
+			<li><%= msg %></li>
+		<% end %>
+	</ul>
+<% end %>
+
+
+<% if @order_items.size>0 %>
+  
+          <p>
+        <a href="checkouts/new" class="btn btn-primary btn-lg pull-right">
+          <span class="glyphicon glyphicon-shopping-cart"></span> Checkout Basket
+        </a>
+      </p> 
+<br/><br/><br/>
+
+	<% @order_items.each do |item| %>
+		<% if item.product %>
+				<div class="well">
+					<div class="row">
+						<div class="col-sm-8">
+							<h3><%= item.product.title %></h3>
+							<p><%= item.product.description %></p>
+						</div>
+						<div class="col-sm-4">
+							<div class="pull-right">
+							<%= form_for(item, remote: true) do |f| %>
+								<%= f.hidden_field :product_id, value: item.product.id %>
+								<h5><%= item.product.price %></h5>
+								<div class="form-group">
+									<%= f.text_field :quantity, value: item.quantity.to_i, min: 1, class: 'form-control' %>
+								</div>
+								<div class="btn-group">
+									<%= f.submit "Update Quantity", class: 'btn btn-primary btn-xs' %>
+									<%= link_to "Delete", item, :method => :delete, :confirm => "Are you sure ?", class: 'btn btn-danger btn-xs'%>
+								</div>
+								<span>Total Price: <%= item.total_price %></span>
+							<% end %>
+							</div>
+						</div>
+					</div>
+				</div>
+			<%end%>
+	<% end %>
+<% else %>
+	<h1> You do not have any items in your basket . <%= link_to 'Start Shopping', products_path %></h1>
+<% end %>

@@ -1,0 +1,329 @@
+
+<div class="row">
+    <div class="col-lg-8 col-md-offset-2" >
+      <p id="notice"><%= notice %></p>
+       
+      <div class="row">
+        <div class="col-md-6"><%= image_tag(@product.image, size: "350x350") %><br/>
+          <h3 style="margin-left: 40px;"> Product Description </h3>
+          <p style="margin-left: 40px;"><%= @product.description %></p>
+          <p style="margin-left: 40px;">
+          <%= link_to 'Back', products_path %></p>
+          <br/><br/>
+        </div>
+        <div class="col-md-4">
+          <h3 style="margin-left: 18px;">
+            <%= @product.title %></h3>
+          <hr style="margin-left: 18px;">
+          <p style="font-size: 24px; margin-left: 16px" class="price">$
+            
+          </p>
+
+          <hr style="margin-left: 18px;"/>
+         <!--<p style="margin-left: 18px;"> Weight:</p>
+         <p style="margin-left: 18px;"><%= @product.weight %> LBS</p>
+         <hr style="margin-left: 18px;"/>-->
+             
+
+          <div class="row" ng-app="" style="margin-left: 18px;">
+               <% if @product.additional_foot_price %>
+                  <input type="hidden" id="footprice" name="footprice" value=<%=@product.additional_foot_price%> />
+               <%end%>
+                  <input type="hidden" id="base_price_one" name="base_price_one" value=<%=@product.base_price_one%> />
+                  <input type="hidden" id="base_price_two" name="base_price_two" value=<%=@product.base_price_two%> />
+                  <input type="hidden" id="base_price_oneofive" name="base_price_oneofive" value=<%=@product.base_price_oneofive%> />
+                  <input type="hidden" id="base_price_twofive" name="base_price_twofive" value=<%=@product.base_price_twofive%> />
+                  <input type="hidden" id="base_price_three" name="base_price_three" value=<%=@product.base_price_three%> />
+                  <input type="hidden" id="base_price_four" name="base_price_four" value=<%=@product.base_price_four%> />
+                  <input type="hidden" id="categoryId" name="categoryId" value=<%=@product.category%> />
+                  
+                  
+
+              
+             
+         
+              <%= form_for(@order_item, remote:true) do |f| %>
+                <%= f.hidden_field :product_id, value: @product.id %>
+
+                <% if @product.is_doughnut? || @product.is_couplings? %>
+                 <div class="field">
+                    <%= f.label :size, "Select Size " %>
+                    <%= f.select  :size, [1, 1.5, 2, 2.5, 3, 4 ] %> inch 
+                 </div><br/>
+               
+
+                 <% elsif @product.is_supermax? %> 
+                  <div class="field">
+                    <%= f.label :size, "Select Size " %>
+                    <%= f.select  :size, [ 1.5, 2, 2.5, 3, 4 ]%> inch 
+                  </div><br/>
+          
+                 
+                 <% elsif @product.is_hose?%>
+                 <div class="field">
+                    <%= f.label :size, "Select Inner Diammeter " %>
+                    <%= f.select  :size, [1, 1.5, 2, 2.5, 3, 4 ]%> inch 
+                  </div> <br/>
+               
+
+                  <div class="field">
+                    <%= f.label :length, "Select length " %>
+                    <%= f.select  :length, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,42,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100]%>
+                  </div>  
+     
+
+                 <%else%>  
+
+
+                <%end%>
+                <hr>
+              
+             <%= f.label :quantity, "Select quantity " %>
+              <%= f.text_field :quantity, value: 1, min: 1,:input_html => { :value => 1 }, class: 'form-control' %>
+              <%= f.submit "Add to basket", class: 'btn btn-primary btn-sm' %>
+                </div>
+              <%end%>
+
+              <!--
+         <p style="margin-left: 18px;">Quantity: <br/>
+          <input type="text" name="quantity" style="margin-top: 10px"></p>
+
+          <button type="button" class="btn btn-primary" style="margin-left: 18px;">Add to basket</button>-->
+        </div>
+      </div>
+      
+  </div>
+</div>
+
+<!--<p>
+  <strong>Title:</strong>
+  <%= @product.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @product.description %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @product.price %>
+</p>
+
+<p>
+  <strong>Length:</strong>
+  <%= @product.length %>
+</p>
+
+<p>
+  <strong>Weight:</strong>
+  <%= @product.weight %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @product.name %>
+</p>
+
+<%= link_to 'Edit', edit_product_path(@product) %> |
+<%= link_to 'Back', products_path %>
+-->
+<script>
+   
+   $(function() {
+      var quantity = $('input#order_item_quantity.form-control').val();
+      var length = $('select#order_item_length').val();
+      var size = $('select#order_item_size').val();
+      var category = $('input#categoryId').val();
+      var footprice = $('input#footprice').val();
+      var base_price;
+      var price;
+      //$('p.price').text(price);
+      $('p.price').text('$'+ $('input#base_price_one').val());
+
+      $('input#order_item_quantity.form-control').on("input",function(e){
+       if($(this).data("lastval")!= $(this).val()){
+           $(this).data("lastval",$(this).val());
+           //change action
+           quantity = $(this).val(); 
+           //alert($('input#footprice').val());
+           //alert(getBasePrice());
+           //alert($('input#categoryId').val());
+           $('p.price').text('$'+ parseFloat(getBasePrice()));
+       };
+      });
+
+      $(document).on('change','#order_item_size',function(){
+           size = $('#order_item_size').val();
+           //alert($('input#footprice').val());
+           //alert(getBasePrice());
+           //alert($('input#categoryId').val());
+            $('p.price').text('$'+ parseFloat(getBasePrice()));
+          });
+
+      $(document).on('change','#order_item_length',function(){
+           length = $('#order_item_length').val();
+           //alert($('input#footprice').val());
+           //alert(getBasePrice());
+           //alert($('input#categoryId').val());
+           $('p.price').text('$'+ parseFloat(getBasePrice()));
+          });
+
+      var getBasePrice = function(){
+        switch (parseFloat($('select#order_item_size').val())){ 
+            case 1: 
+              if (($('input#categoryId').val()) == ("Hose" || "Hose Assemblies")){ 
+
+               return ((parseFloat($('input#base_price_one').val())) +
+                 (parseFloat($('input#footprice').val())) *
+                  ((parseFloat($('select#order_item_length').val())) - 1.00))*(parseFloat($('input#order_item_quantity.form-control').val())) ;
+                
+
+              } else{
+              return ((parseFloat($('input#base_price_one').val())) *  (parseFloat($('input#order_item_quantity.form-control').val())));
+          }
+              break;
+            case 1.5: 
+              if (($('input#categoryId').val()) == ("Hose" || "Hose Assemblies")){
+
+                 return ((parseFloat($('input#base_price_oneofive').val())) +
+                 (parseFloat($('input#footprice').val())) *
+                  ((parseFloat($('select#order_item_length').val())) - 1.00))*(parseFloat($('input#order_item_quantity.form-control').val())) ;
+
+
+              }else{
+                return ((parseFloat($('input#base_price_oneofive').val())) *  (parseFloat($('input#order_item_quantity.form-control').val())));
+              }
+              break;
+            case 2:  
+              if (($('input#categoryId').val()) == ("Hose" || "Hose Assemblies")){
+               
+               return ((parseFloat($('input#base_price_two').val())) +
+                 (parseFloat($('input#footprice').val())) *
+                  ((parseFloat($('select#order_item_length').val())) - 1.00))*(parseFloat($('input#order_item_quantity.form-control').val())) ;
+
+              }
+              else {return ((parseFloat($('input#base_price_two').val())) *  (parseFloat($('input#order_item_quantity.form-control').val())));}
+                
+            case 2.5: 
+               if (($('input#categoryId').val()) == ("Hose" || "Hose Assemblies")){
+
+
+               return ((parseFloat($('input#base_price_twofive').val())) +
+                 (parseFloat($('input#footprice').val())) *
+                  ((parseFloat($('select#order_item_length').val())) - 1.00))*(parseFloat($('input#order_item_quantity.form-control').val())) ;
+
+
+               }
+              else {
+                return ((parseFloat($('input#base_price_twofive').val())) *  (parseFloat($('input#order_item_quantity.form-control').val())));
+              }
+              break;
+            case 3: 
+                if (($('input#categoryId').val()) == ("Hose" || "Hose Assemblies")){
+
+                  return ((parseFloat($('input#base_price_three').val())) +
+                 (parseFloat($('input#footprice').val())) *
+                  ((parseFloat($('select#order_item_length').val())) - 1.00))*(parseFloat($('input#order_item_quantity.form-control').val())) ;
+
+                }
+              else {return ((parseFloat($('input#base_price_three').val())) *  (parseFloat($('input#order_item_quantity.form-control').val())));}
+              
+              break;
+            case 4: 
+               if (($('input#categoryId').val()) == ("Hose" || "Hose Assemblies")){
+                
+              return ((parseFloat($('input#base_price_four').val())) +
+                 (parseFloat($('input#footprice').val())) *
+                  ((parseFloat($('select#order_item_length').val())) - 1.00))*(parseFloat($('input#order_item_quantity.form-control').val())) ;
+
+              }
+              else {
+                return ((parseFloat($('input#base_price_four').val())) *  (parseFloat($('input#order_item_quantity.form-control').val())));
+              }
+              break;
+            default:
+
+              return ((parseFloat($('input#base_price_one').val())) *  (parseFloat($('input#order_item_quantity.form-control').val())));
+          }
+      };
+      /*
+      var getBasePrice = function(){
+        switch(size) {
+          case '1':
+            if ($('input#categoryId').val() == "Hose" || "Hose Assemblies"){
+                  return (parseFloat($('input#base_price_one').val()) + parseFloat($('input#footprice').val())* parseFloat(($('select#order_item_length').val()) - 1))* parseFloat($('input#order_item_quantity.form-control').val());
+                }
+                else {
+                  return $('input#base_price_one').val() * parseFloat($('input#order_item_quantity.form-control').val());
+                }
+                break;
+          case '1.5':
+            if ($('input#categoryId').val() == "Hose" || "Hose Assemblies"){
+                  return parseFloat(($('input#base_price_oneofive').val()) + parseFloat($('input#footprice').val()) * parseFloat(($('select#order_item_length').val())-1))* parseFloat($('input#order_item_quantity.form-control').val());
+                }
+                else {
+                  return $('input#base_price_oneofive').val() * parseFloat($('input#order_item_quantity.form-control').val());
+                }
+              
+              break;
+          case '2':
+              if ($('input#categoryId').val() == "Hose" || "Hose Assemblies"){
+                  return (parseFloat($('input#base_price_two').val()) + parseFloat($('input#footprice').val())* parseFloat(($('select#order_item_length').val())-1))* parseFloat($('input#order_item_quantity.form-control').val())
+                }
+                else {
+                  return $('input#base_price_two').val() * parseFloat($('input#order_item_quantity.form-control').val());
+                }
+              break;
+          case '2.5':
+             if ($('input#categoryId').val() == "Hose" || "Hose Assemblies"){
+                  return parseFloat($('input#base_price_twofive').val()) + parseFloat($('input#footprice').val()) * parseFloat(($('select#order_item_length').val())-1);
+                }
+                else {
+                  return $('input#base_price_twofive').val() * parseFloat($('input#order_item_quantity.form-control').val());
+                }
+              break;
+
+          case '3':
+              if ($('input#categoryId').val() == "Hose" || "Hose Assemblies"){
+                  return parseFloat($('input#base_price_three').val()) + parseFloat($('input#footprice').val()) * parseFloat(($('select#order_item_length').val())-1);
+                }
+                else {
+                  return $('input#base_price_three').val() * parseFloat($('input#order_item_quantity.form-control').val());
+                }
+              break;
+      
+          case '4':
+              if ($('input#categoryId').val() == "Hose" || "Hose Assemblies"){
+                  return parseFloat($('input#base_price_four').val()) + parseFloat($('input#footprice').val()) * parseFloat(($('select#order_item_length').val())-1);
+                }
+                else {
+                  return $('input#base_price_four').val() * parseFloat($('input#order_item_quantity.form-control').val());
+                }
+              break;
+          default:
+              return ($('input#base_price_one').val() * parseFloat($('input#order_item_quantity.form-control').val()))** parseFloat($('input#order_item_quantity.form-control').val());
+        }
+      }
+
+      //var getPrice = function() {
+      //}
+
+      /*var getPrice = function(){
+        if (category = "Hose Assemblies"){
+            return base_price + (length -1)* footprice;
+        }
+        else {
+            return base_price;
+        }
+      }
+        */
+
+     /* var getTotal = function(){
+        base_price = getBasePrice();
+        price = getPrice();
+        return price;
+      }
+     */
+   });
+</script>
